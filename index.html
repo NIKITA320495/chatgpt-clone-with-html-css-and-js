@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Include Font Awesome CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+    </script>
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+        // Add event listeners to each element with class "header" for mouseleave event
+        var headers = document.getElementsByClassName("header");
+        for (var i = 0; i < headers.length; i++) {
+            headers[i].addEventListener('mouseleave', function () {
+                // Reset background color to default on mouse leave
+                this.style.backgroundColor = '';
+            });
+        }
+        // Access your API key
+        // Define a function to generate content for inner rectangles
+        async function generateInnerRectangleContent() {
+            const genAI = new GoogleGenerativeAI("AIzaSyBtd4jGDayYjdx0gGJYYwaFHFgdenCLQZg");
+            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+            // Define the prompts for each inner rectangle
+            const prompts = [
+                "Generate a very short prompt to perform something",
+                "Generate a very short prompt to perform something else",
+                "Generate a very short prompt to perform something else2",
+                "Generate a very short prompt  to perform something else3"
+            ];
+
+            // Loop through each inner rectangle and generate content
+            const innerRectangles = document.querySelectorAll(".rec");
+            for (let i = 0; i < innerRectangles.length; i++) {
+                const prompt = prompts[i];
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                const text = await response.text();
+                innerRectangles[i].innerText = text;
+            }
+        }
+
+        // Call the function to generate content for inner rectangles
+        generateInnerRectangleContent();
+
+        // Define function to get answer
+        async function getAnswer() {
+            const genAI = new GoogleGenerativeAI("AIzaSyBtd4jGDayYjdx0gGJYYwaFHFgdenCLQZg");
+            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const prompt = document.getElementById("question").value;
+            // Generate content based on the question
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = await response.text();
+            const middleDiv = document.querySelector(".middle");
+            console.log(text);
+            // Change the inner text of the div
+            middleDiv.innerText = text;
+            // Hide the small rectangles
+            const innerRectangles = document.querySelectorAll(".inner-rectangle12, .inner-rectangle34");
+            innerRectangles.forEach(rectangle => {
+                rectangle.style.display = 'none';
+            });
+        }
+        // Attach event listener to the button to trigger getAnswer function
+        document.addEventListener("DOMContentLoaded", () => {
+            const button = document.getElementById("submit"); // Select the button element
+            button.addEventListener("click", getAnswer); // Attach event listener
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+            const button = document.getElementById("question");
+            button.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    getAnswer();
+                }
+            });
+        });
+        async function getrecAnswer() {
+            const genAI = new GoogleGenerativeAI("AIzaSyBtd4jGDayYjdx0gGJYYwaFHFgdenCLQZg");
+            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const prompt = this.innerText; // Use 'this' to refer to the clicked element
+            // Generate content based on the question
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = await response.text();
+            const middleDiv = document.querySelector(".middle");
+            console.log(text);
+            // Change the inner text of the div
+            middleDiv.innerText = text;
+            // Hide the small rectangles
+            const innerRectangles = document.querySelectorAll(".inner-rectangle12, .inner-rectangle34");
+            innerRectangles.forEach(rectangle => {
+                rectangle.style.display = 'none';
+            });
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const recs = document.getElementsByClassName("rec"); // Select all elements with class "rec"
+            for (let i = 0; i < recs.length; i++) {
+                recs[i].addEventListener("click", getrecAnswer); // Attach event listener to each element
+            }
+        });
+    </script>
+
+    <div class="header"><span> chatGPT 3.5 <i class="fa arrow -solid fa-angle-down fa-xs"></i></span>
+    </div>
+    <div class="container">
+        <div class="left-rectangle">
+            <!-- Left rectangle content goes here -->
+            <div class="upperleftcontent"><span><img class="new_chatimg" src="icons8-chatgpt-192.png"> <span
+                        class=" new_chattext">New chat <i
+                            class=" writelogo fa-regular fa-pen-to-square"></i></span></span></div>
+        </div>
+    </div>
+    <div class="middle">
+        <img class="middleimg" src="icons8-chatgpt-192.png">
+        <br>
+        <div class="middletext">How can i help you today?</div>
+    </div>
+    <div class="middlebottom">
+        <div class="main-rectangle">
+            <!-- Four inner rectangles -->
+            <div class="inner-rectangle12">
+                <span class="rec">Create a charter <p class="short">to start a film club</p><span class="b"><i
+                            class="fa -regular fa-arrow-up fa-xs"></i></span></span>
+                <span class="rec">compare design apps<p class="short">for mobile app</p><span class="b"><i
+                            class="fa -regular fa-arrow-up fa-xs"></i></span></span>
+            </div>
+            <div class="inner-rectangle34">
+                <span class="rec">Explain this code<p class="short">print"hello world"</p><span class="b"><i
+                            class="fa -regular fa-arrow-up fa-xs"></i></span></span>
+                <span class="rec">plan a tour<p class="short">to singapore</p><span class="b"><i
+                            class="fa -regular fa-arrow-up fa-xs"></i></span></span>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="bottom">
+        <input class="textbox" type="text" id="question" placeholder="Message ChatGPT...">
+        <i class="fa uparrow -regular fa-arrow-up fa-s" id="submit"></i>
+    </div>
+</body>
+
+</html>
